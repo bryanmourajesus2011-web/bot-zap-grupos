@@ -1,1 +1,150 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOT ZAP GRUPOS</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+ background:#080d0b;color:white;
+ font-family:Arial,sans-serif;padding:20px;
+}
+.container{max-width:850px;margin:auto}
+header{
+ background:#101b15;padding:25px;border-radius:15px;
+ border:1px solid #174b30;margin-bottom:20px;
+}
+h1{color:#19d66b;font-size:27px}
+header p{color:#aaa;margin-top:8px}
+.card{
+ background:#111a15;border:1px solid #203c2b;
+ padding:22px;border-radius:15px;margin-bottom:18px;
+}
+h2{font-size:18px;margin-bottom:15px;color:#19d66b}
+label{display:block;margin:13px 0 7px;color:#ccc}
+input,textarea{
+ width:100%;padding:13px;border-radius:9px;
+ border:1px solid #31533d;background:#080e0a;
+ color:white;outline:none;font-size:15px;
+}
+textarea{min-height:120px;resize:vertical}
+button{
+ border:0;padding:13px 18px;border-radius:9px;
+ cursor:pointer;font-weight:bold;margin-top:15px;
+}
+.green{background:#16c963;color:#001b0b}
+.red{background:#c93636;color:white}
+.gray{background:#29352d;color:white}
+.group{
+ display:flex;justify-content:space-between;
+ align-items:center;background:#18251c;
+ padding:13px;border-radius:9px;margin-top:9px;
+}
+.group button{margin:0;padding:8px 12px}
+.status{
+ padding:12px;background:#18251c;
+ border-radius:9px;color:#19d66b;margin-top:12px;
+}
+small{color:#999;display:block;margin-top:10px}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+<h1>🍀 BOT ZAP GRUPOS</h1>
+<p>Painel de mensagens e organização de grupos</p>
+</header>
+
+<div class="card">
+<h2>💬 Mensagem</h2>
+<label>Digite sua mensagem</label>
+<textarea id="mensagem" placeholder="Digite aqui sua mensagem..."></textarea>
+<button class="green" onclick="copiar()">COPIAR MENSAGEM</button>
+</div>
+
+<div class="card">
+<h2>👥 Meus grupos</h2>
+<label>Nome do grupo</label>
+<input id="nomeGrupo" placeholder="Ex: Grupo de divulgação">
+
+<label>Link ou identificação do grupo</label>
+<input id="linkGrupo" placeholder="Cole o link do grupo">
+
+<button class="green" onclick="adicionar()">ADICIONAR GRUPO</button>
+<div id="lista"></div>
+</div>
+
+<div class="card">
+<h2>⚙️ Configurações</h2>
+<label>Intervalo entre envios (minutos)</label>
+<input id="intervalo" type="number" min="1" value="30">
+
+<div class="status" id="status">
+● PAINEL PRONTO — ENVIO NÃO CONECTADO
+</div>
+
+<small>
+O painel ainda não está conectado a um serviço de envio.
+O cadastro de grupos é apenas organizacional.
+</small>
+</div>
+
+</div>
+
+<script>
+let grupos=[];
+
+function adicionar(){
+ const nome=document.getElementById('nomeGrupo').value.trim();
+ const link=document.getElementById('linkGrupo').value.trim();
+
+ if(!nome || !link){
+ alert('Preencha o nome e a identificação do grupo.');
+ return;
+ }
+
+ grupos.push({nome,link});
+ document.getElementById('nomeGrupo').value='';
+ document.getElementById('linkGrupo').value='';
+ renderizar();
+}
+
+function renderizar(){
+ const lista=document.getElementById('lista');
+ lista.innerHTML='';
+
+ grupos.forEach((g,i)=>{
+ const div=document.createElement('div');
+ div.className='group';
+
+ const nome=document.createElement('span');
+ nome.textContent=g.nome;
+
+ const btn=document.createElement('button');
+ btn.className='red';
+ btn.textContent='EXCLUIR';
+ btn.onclick=()=>{
+ grupos.splice(i,1);
+ renderizar();
+ };
+
+ div.append(nome,btn);
+ lista.appendChild(div);
+ });
+}
+
+function copiar(){
+ const msg=document.getElementById('mensagem').value;
+ if(!msg){alert('Digite uma mensagem primeiro.');return;}
+ navigator.clipboard.writeText(msg)
+ .then(()=>alert('Mensagem copiada!'));
+}
+</script>
+</body>
+</html>
+
